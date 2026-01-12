@@ -83,13 +83,28 @@ button:hover {
 </div>
 
 <!-- CADASTRO -->
-<div class="container hidden" id="cadastro">
-    <h2>Cadastro</h2>
-    <input id="cadEmail" type="email" placeholder="Email">
-    <input id="cadSenha" type="password" placeholder="Senha">
-    <button onclick="cadastrar()">Cadastrar</button>
-    <div class="link" onclick="mostrarLogin()">Já tenho conta</div>
-</div>
+    <script>
+function login() {
+    let email = loginEmail.value.trim();
+    let senha = loginSenha.value.trim();
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    let usuario = usuarios.find(u => 
+        u.email === email && u.senha === senha
+    );
+
+    if (!usuario) {
+        alert("Email ou senha incorretos");
+        return;
+    }
+
+    localStorage.setItem("logado", email);
+    login.classList.add("hidden");
+    home.classList.remove("hidden");
+    atualizarStatusPremium();
+}
+</script>
 
 <!-- HOME -->
 <div class="container hidden" id="home">
