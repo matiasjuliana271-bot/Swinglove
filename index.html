@@ -6,47 +6,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff4e8a, #ff8fb1);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#ff4e8a,#ff8fb1);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
-.app {
-  background: #fff;
-  width: 90%;
-  max-width: 420px;
-  border-radius: 20px;
-  padding: 25px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+.app{
+  background:#fff;
+  width:90%;
+  max-width:420px;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
-h1 {
-  text-align: center;
-  color: #ff4e8a;
+h1{text-align:center;color:#ff4e8a}
+p{text-align:center;color:#666;font-size:14px}
+input,select,button{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
 }
-p {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
+button{
+  background:#ff4e8a;
+  color:#fff;
+  border:none;
+  font-size:16px;
 }
-input, select, button {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-button {
-  background: #ff4e8a;
-  color: white;
-  border: none;
-  font-size: 16px;
-}
-.hidden { display: none; }
-.logout { background: #999; }
+.logout{background:#999}
+.link{color:#ff4e8a;text-align:center;cursor:pointer}
+.hidden{display:none}
 </style>
 </head>
 
@@ -54,23 +48,31 @@ button {
 
 <div class="app">
 
+<!-- +18 -->
+<div id="verificacao18" class="hidden">
+  <h1>🔞 Conteúdo Adulto</h1>
+  <p>Acesso permitido apenas para maiores de 18 anos.</p>
+  <button onclick="aceitar18()">Sou maior de 18</button>
+  <button class="logout" onclick="bloquear()">Sair</button>
+</div>
+
 <!-- LOGIN -->
-<div id="login">
+<div id="login" class="hidden">
   <h1>❤️ Swing Love</h1>
-  <input type="email" id="loginEmail" placeholder="Email">
-  <input type="password" id="loginSenha" placeholder="Senha">
+  <input id="loginEmail" type="email" placeholder="Email">
+  <input id="loginSenha" type="password" placeholder="Senha">
   <button onclick="login()">Entrar</button>
-  <p onclick="mostrarCadastro()" style="cursor:pointer;color:#ff4e8a">Criar conta</p>
+  <div class="link" onclick="mostrarCadastro()">Criar conta</div>
 </div>
 
 <!-- CADASTRO -->
 <div id="cadastro" class="hidden">
-  <h1>Cadastro</h1>
-  <input type="text" id="cadastroNome" placeholder="Nome ou Nick">
-  <input type="email" id="cadastroEmail" placeholder="Email">
-  <input type="password" id="cadastroSenha" placeholder="Senha">
+  <h1>Criar conta</h1>
+  <input id="cadastroNome" placeholder="Nome ou Nick">
+  <input id="cadastroEmail" type="email" placeholder="Email">
+  <input id="cadastroSenha" type="password" placeholder="Senha">
   <button onclick="cadastrar()">Cadastrar</button>
-  <p onclick="mostrarLogin()" style="cursor:pointer;color:#ff4e8a">Já tenho conta</p>
+  <div class="link" onclick="mostrarLogin()">Já tenho conta</div>
 </div>
 
 <!-- HOME -->
@@ -91,89 +93,118 @@ button {
     <option value="casal">Casal</option>
   </select>
 
-  <input type="text" id="apelido" placeholder="Apelido">
+  <input id="apelido" placeholder="Apelido">
 
   <div id="casalCampos" class="hidden">
-    <input type="text" id="nomeParceiro" placeholder="Nome do parceiro(a)">
+    <input id="nomeParceiro" placeholder="Nome do parceiro(a)">
   </div>
 
-  <input type="number" id="idade" placeholder="Idade">
+  <input id="idade" type="number" placeholder="Idade">
 
-  <button onclick="salvarPerfil()">Salvar Perfil</button>
+  <button onclick="salvarPerfil()">Salvar</button>
   <button class="logout" onclick="voltarHome()">Voltar</button>
 </div>
 
 </div>
 
 <script>
-function mostrarCadastro(){
-  login.classList.add("hidden");
-  cadastro.classList.remove("hidden");
+// ELEMENTOS
+const verificacao18 = document.getElementById("verificacao18");
+const loginDiv = document.getElementById("login");
+const cadastroDiv = document.getElementById("cadastro");
+const homeDiv = document.getElementById("home");
+const perfilDiv = document.getElementById("perfil");
+
+// +18
+function aceitar18(){
+  localStorage.setItem("maior18","sim");
+  verificacao18.classList.add("hidden");
+  loginDiv.classList.remove("hidden");
 }
-function mostrarLogin(){
-  cadastro.classList.add("hidden");
-  login.classList.remove("hidden");
-}
-
-const login = document.getElementById("login");
-const cadastro = document.getElementById("cadastro");
-const home = document.getElementById("home");
-
-const cadastroNome = document.getElementById("cadastroNome");
-const cadastroEmail = document.getElementById("cadastroEmail");
-const cadastroSenha = document.getElementById("cadastroSenha");
-
-const loginEmail = document.getElementById("loginEmail");
-const loginSenha = document.getElementById("loginSenha");
+function bloquear(){
+  alert("Acesso permitido apenas para maiores de 18 anos.");
 }
 
+// TELAS
+function mostrarCadastro(){loginDiv.classList.add("hidden");cadastroDiv.classList.remove("hidden")}
+function mostrarLogin(){cadastroDiv.classList.add("hidden");loginDiv.classList.remove("hidden")}
+function mostrarHome(){
+  let user = JSON.parse(localStorage.getItem("usuarioLogado"));
+  if(!user) return;
+  loginDiv.classList.add("hidden");
+  cadastroDiv.classList.add("hidden");
+  perfilDiv.classList.add("hidden");
+  homeDiv.classList.remove("hidden");
+  document.getElementById("bemVindo").innerText="Bem-vindo(a), "+user.nome;
+}
+function abrirPerfil(){homeDiv.classList.add("hidden");perfilDiv.classList.remove("hidden")}
+function voltarHome(){mostrarHome()}
+
+// CADASTRO
+function cadastrar(){
+  const nome=cadastroNome.value;
+  const email=cadastroEmail.value;
+  const senha=cadastroSenha.value;
+
+  if(!nome||!email||!senha) return alert("Preencha tudo!");
+
+  let usuarios=JSON.parse(localStorage.getItem("usuarios"))||[];
+  if(usuarios.find(u=>u.email===email)) return alert("Email já cadastrado");
+
+  usuarios.push({nome,email,senha});
+  localStorage.setItem("usuarios",JSON.stringify(usuarios));
+  alert("Cadastro realizado!");
+  mostrarLogin();
+}
+
+// LOGIN
 function login(){
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  let user = usuarios.find(u => u.email === loginEmail.value && u.senha === loginSenha.value);
+  let usuarios=JSON.parse(localStorage.getItem("usuarios"))||[];
+  let user=usuarios.find(u=>u.email===loginEmail.value && u.senha===loginSenha.value);
   if(!user) return alert("Dados inválidos");
-  localStorage.setItem("usuarioLogado", JSON.stringify(user));
+  localStorage.setItem("usuarioLogado",JSON.stringify(user));
   mostrarHome();
 }
 
-function mostrarHome(){
-  let user = JSON.parse(localStorage.getItem("usuarioLogado"));
-  login.classList.add("hidden");
-  cadastro.classList.add("hidden");
-  perfil.classList.add("hidden");
-  home.classList.remove("hidden");
-  bemVindo.innerText = "Bem-vindo(a), " + user.nome;
-}
-
-function abrirPerfil(){
-  home.classList.add("hidden");
-  perfil.classList.remove("hidden");
-}
-
+// PERFIL
 function toggleCasal(){
-  casalCampos.classList.toggle("hidden", tipoPerfil.value !== "casal");
+  casalCampos.classList.toggle("hidden",tipoPerfil.value!=="casal");
 }
-
 function salvarPerfil(){
-  localStorage.setItem("perfil", JSON.stringify({
-    tipo: tipoPerfil.value,
-    apelido: apelido.value,
-    parceiro: nomeParceiro.value,
-    idade: idade.value
+  localStorage.setItem("perfil",JSON.stringify({
+    tipo:tipoPerfil.value,
+    apelido:apelido.value,
+    parceiro:nomeParceiro.value,
+    idade:idade.value
   }));
   alert("Perfil salvo!");
   voltarHome();
 }
 
-function voltarHome(){ mostrarHome(); }
-
+// LOGOUT
 function logout(){
   localStorage.removeItem("usuarioLogado");
-  home.classList.add("hidden");
+  homeDiv.classList.add("hidden");
   mostrarLogin();
 }
 
-if(localStorage.getItem("usuarioLogado")) mostrarHome();
+// INÍCIO
+window.onload=function(){
+  loginDiv.classList.add("hidden");
+  cadastroDiv.classList.add("hidden");
+  homeDiv.classList.add("hidden");
+  perfilDiv.classList.add("hidden");
+  verificacao18.classList.add("hidden");
+
+  if(!localStorage.getItem("maior18")){
+    verificacao18.classList.remove("hidden");
+  }else if(localStorage.getItem("usuarioLogado")){
+    mostrarHome();
+  }else{
+    loginDiv.classList.remove("hidden");
+  }
+};
 </script>
 
 </body>
-  </html>
+    </html>
