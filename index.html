@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Swing Love</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff4e8a, #ff8fb1);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app {
+  background: #fff;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+h1 {
+  text-align: center;
+  color: #ff4e8a;
+}
+p {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+button {
+  background: #ff4e8a;
+  color: white;
+  border: none;
+  font-size: 16px;
+}
+.hidden { display: none; }
+.logout { background: #999; }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- LOGIN -->
+<div id="login">
+  <h1>❤️ Swing Love</h1>
+  <input type="email" id="loginEmail" placeholder="Email">
+  <input type="password" id="loginSenha" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <p onclick="mostrarCadastro()" style="cursor:pointer;color:#ff4e8a">Criar conta</p>
+</div>
+
+<!-- CADASTRO -->
+<div id="cadastro" class="hidden">
+  <h1>Cadastro</h1>
+  <input type="text" id="cadastroNome" placeholder="Nome ou Nick">
+  <input type="email" id="cadastroEmail" placeholder="Email">
+  <input type="password" id="cadastroSenha" placeholder="Senha">
+  <button onclick="cadastrar()">Cadastrar</button>
+  <p onclick="mostrarLogin()" style="cursor:pointer;color:#ff4e8a">Já tenho conta</p>
+</div>
+
+<!-- HOME -->
+<div id="home" class="hidden">
+  <h1>❤️ Swing Love</h1>
+  <p id="bemVindo"></p>
+  <button onclick="abrirPerfil()">👤 Meu Perfil</button>
+  <button class="logout" onclick="logout()">Sair</button>
+</div>
+
+<!-- PERFIL -->
+<div id="perfil" class="hidden">
+  <h1>Meu Perfil</h1>
+
+  <select id="tipoPerfil" onchange="toggleCasal()">
+    <option value="">Tipo de perfil</option>
+    <option value="single">Single</option>
+    <option value="casal">Casal</option>
+  </select>
+
+  <input type="text" id="apelido" placeholder="Apelido">
+
+  <div id="casalCampos" class="hidden">
+    <input type="text" id="nomeParceiro" placeholder="Nome do parceiro(a)">
+  </div>
+
+  <input type="number" id="idade" placeholder="Idade">
+
+  <button onclick="salvarPerfil()">Salvar Perfil</button>
+  <button class="logout" onclick="voltarHome()">Voltar</button>
+</div>
+
+</div>
+
+<script>
+function mostrarCadastro(){
+  login.classList.add("hidden");
+  cadastro.classList.remove("hidden");
+}
+function mostrarLogin(){
+  cadastro.classList.add("hidden");
+  login.classList.remove("hidden");
+}
+
+function cadastrar(){
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  usuarios.push({
+    nome: cadastroNome.value,
+    email: cadastroEmail.value,
+    senha: cadastroSenha.value
+  });
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  alert("Cadastro feito!");
+  mostrarLogin();
+}
+
+function login(){
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  let user = usuarios.find(u => u.email === loginEmail.value && u.senha === loginSenha.value);
+  if(!user) return alert("Dados inválidos");
+  localStorage.setItem("usuarioLogado", JSON.stringify(user));
+  mostrarHome();
+}
+
+function mostrarHome(){
+  let user = JSON.parse(localStorage.getItem("usuarioLogado"));
+  login.classList.add("hidden");
+  cadastro.classList.add("hidden");
+  perfil.classList.add("hidden");
+  home.classList.remove("hidden");
+  bemVindo.innerText = "Bem-vindo(a), " + user.nome;
+}
+
+function abrirPerfil(){
+  home.classList.add("hidden");
+  perfil.classList.remove("hidden");
+}
+
+function toggleCasal(){
+  casalCampos.classList.toggle("hidden", tipoPerfil.value !== "casal");
+}
+
+function salvarPerfil(){
+  localStorage.setItem("perfil", JSON.stringify({
+    tipo: tipoPerfil.value,
+    apelido: apelido.value,
+    parceiro: nomeParceiro.value,
+    idade: idade.value
+  }));
+  alert("Perfil salvo!");
+  voltarHome();
+}
+
+function voltarHome(){ mostrarHome(); }
+
+function logout(){
+  localStorage.removeItem("usuarioLogado");
+  home.classList.add("hidden");
+  mostrarLogin();
+}
+
+if(localStorage.getItem("usuarioLogado")) mostrarHome();
+</script>
+
+</body>
+  </html>
