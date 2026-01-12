@@ -115,16 +115,16 @@ function mostrarLogin(){
   login.classList.remove("hidden");
 }
 
-function cadastrar(){
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-  usuarios.push({
-    nome: cadastroNome.value,
-    email: cadastroEmail.value,
-    senha: cadastroSenha.value
-  });
-  localStorage.setItem("usuarios", JSON.stringify(usuarios));
-  alert("Cadastro feito!");
-  mostrarLogin();
+const login = document.getElementById("login");
+const cadastro = document.getElementById("cadastro");
+const home = document.getElementById("home");
+
+const cadastroNome = document.getElementById("cadastroNome");
+const cadastroEmail = document.getElementById("cadastroEmail");
+const cadastroSenha = document.getElementById("cadastroSenha");
+
+const loginEmail = document.getElementById("loginEmail");
+const loginSenha = document.getElementById("loginSenha");
 }
 
 function login(){
